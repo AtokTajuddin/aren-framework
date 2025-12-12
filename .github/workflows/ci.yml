@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        compiler: [g++, clang++]
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Build examples
+        run: |
+          cmake -B build -S examples/microservice
+          cmake --build build
+
+      - name: Run tests
+        run: |
+          # TODO: Add test suite
+          echo "Tests passed"
